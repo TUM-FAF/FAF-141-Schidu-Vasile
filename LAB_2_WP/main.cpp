@@ -1,16 +1,34 @@
 #include <windows.h>
 
+#define ID_SCROLL_BAR 9006
+#define ID_EVENT_RED 9003
+#define ID_EVENT_GREEN 9004
+#define ID_EVENT_BLUE 9005
+#define IDS_TODONUMBER 9011
+
+
+char firstText[] = "HoHoHo! My color is cheanging";
 /*  Declare Windows procedure  */
 LRESULT CALLBACK WindowProcedure (HWND, UINT, WPARAM, LPARAM);
-HWND textField, button1, textBox, button2;
+HWND textField, button1, textBox, button2, scroll;
+
+
+
 /*  Make the class name into a global variable  */
 char szClassName[ ] = "CodeBlocksWindowsApp";
 char name[40];
+static int scrollColor = 0;
+int TODONumber = 0;
+HINSTANCE hInstance;
+
+
+
 
 int WINAPI WinMain (HINSTANCE hThisInstance, HINSTANCE hPrevInstance, LPSTR lpszArgument, int nCmdShow){
 HWND hwnd;               /* This is the handle for our window */
 MSG messages;            /* Here messages to the application are saved */
 WNDCLASSEX wincl;        /* Data structure for the windowclass */
+
 
 /* The Window structure */
 wincl.hInstance = hThisInstance;
@@ -68,10 +86,13 @@ return messages.wParam;
 /*  This function is called by the Windows function DispatchMessage()  */
 
 LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam){
+        PAINTSTRUCT Ps;
+        static RECT rectColorChange, rcQuantity;
+        SetRect(&rectColorChange, 200, 100, 100, 40);
+
 switch (message){                  /* handle the messages */
-        case WM_DESTROY:
-                PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
-        break;
+
+
         case WM_CREATE:
                 textField = CreateWindow("STATIC",
                                          "Type yor name here",
@@ -94,8 +115,42 @@ switch (message){                  /* handle the messages */
                                         385, 50, 50, 18,
                                         hwnd, (HMENU) 2, NULL, NULL);
 
+        // Scroll
+                scroll = CreateWindowEx((DWORD)NULL,
+                                    TEXT("scrollbar"),
+                                    NULL,
+                                    WS_CHILD | WS_VISIBLE | SBS_VERT,
+                                    200, 130, 210, 150,
+                                    hwnd,
+                                    (HMENU) ID_SCROLL_BAR, hInstance,
+                                    NULL);
+                        SetScrollRange(scroll,SB_CTL, 0, 255, FALSE);
+                        SetScrollPos(scroll, SB_CTL, 0, TRUE);
+
+
         break;
-        case WM_COMMAND:
+
+        case WM_PAINT:{
+                HDC hdc = BeginPaint(hwnd, &Ps);
+
+                char TODONrMessage[40];
+                char nr[50];
+                LoadString (hInstance, IDS_TODONUMBER, TODONrMessage, 40) ;
+                wsprintf (nr, TODONrMessage, TODONumber);
+
+                SetBkMode(hdc, TRANSPARENT);
+
+                DrawText( hdc, nr, -1, &rcQuantity, DT_SINGLELINE | DT_NOCLIP) ;
+
+                SetBkMode(hdc, OPAQUE);
+                SetBkColor(hdc, RGB(scrollColor,scrollColor + 70, scrollColor+150));
+                DrawText(hdc, TEXT(firstText), -1, &rectColorChange, DT_NOCLIP);
+
+                EndPaint(hwnd, &Ps);
+        }
+        break;
+
+        case WM_COMMAND:{
                 switch(LOWORD(wParam)){
                         case 1:
                                 ::MessageBeep(MB_ICONERROR);
@@ -108,6 +163,26 @@ switch (message){                  /* handle the messages */
                                 ::MessageBox(hwnd, name,"Hello Window" , MB_OK);
 
                 }
+        }
+        break;
+
+
+        case WM_VSCROLL: {
+                switch (LOWORD(wParam)) {
+                        case SB_THUMBPOSITION:
+                        case SB_THUMBTRACK: {
+                                scrollColor = HIWORD(wParam);
+                        }
+                        break;
+                }
+
+                SetScrollPos(scroll, SB_CTL, scrollColor, TRUE);
+                InvalidateRect(hwnd, &rectColorChange, TRUE);
+        }
+        break;
+        case WM_DESTROY:{
+                PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
+        }
         break;
         default:                      /* for messages that we don't deal with */
 
