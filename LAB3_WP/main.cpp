@@ -95,6 +95,11 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
     int widthSecondColorBox = 281;
     int heightSecondColorBox = 105;
 
+    HBITMAP bmpExercising;
+    HDC hDC, MemDCExercising;
+
+
+
     static HWND AllTools;
     static HWND lineTool;
     static HWND eraserTool;
@@ -332,7 +337,24 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                     NULL);
 
         case WM_PAINT:
-            hdc = BeginPaint(hwnd, &ps);
+
+            hDC = BeginPaint(hwnd, &ps);
+
+            // Load the bitmap from the resource
+            bmpExercising = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_EXERCISING));
+            // Create a memory device compatible with the above DC variable
+            MemDCExercising = CreateCompatibleDC(hDC);
+            // Select the new bitmap
+            SelectObject(MemDCExercising, bmpExercising);
+
+            // Copy the bits from the memory DC into the current dc
+            BitBlt(hDC, 10, 10, 450, 400, MemDCExercising, 0, 0, SRCCOPY);
+
+            // Restore the old bitmap
+            DeleteDC(MemDCExercising);
+            DeleteObject(bmpExercising);
+            EndPaint(hwnd, &ps);
+
             updateColorControls(hdc, fillColor, widthFirstColorBox, heightFirstColorBox);
             updateColorControls(hdc, borderColor, widthSecondColorBox, heightSecondColorBox);
 
