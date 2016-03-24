@@ -8,7 +8,7 @@ LPSTR szClassName = "Lab#3";
 LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);
 HINSTANCE hInst;
 
-COLORREF fillColor = RGB(40, 40, 40);
+COLORREF fillColor = RGB(139, 0, 240);
 COLORREF borderColor = RGB(0, 0, 0);
 COLORREF colorSelect(HWND hwnd, COLORREF color)
 {
@@ -90,10 +90,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine
 
 LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    int xFillPreview   = 115;
-    int yFillPreview   = 200;
-    int xStrokePreview = 115;
-    int yStrokePreview = 250;
+    int widthFirstColorBox   = 281;
+    int heightFirstColorBox   = 55;
+    int widthSecondColorBox = 281;
+    int heightSecondColorBox = 105;
 
     static HWND AllTools;
     static HWND lineTool;
@@ -119,9 +119,9 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
     HBITMAP hbmpDesignerImage = NULL;
     GetObject(hbmpDesignerImage, sizeof(bitmap), &bitmap);
 
-    static RECT drawingArea = {170, 17, 780, 555};
-    static RECT fillColorRect = {xFillPreview, yFillPreview, xFillPreview + 25, yFillPreview + 30};
-    static RECT borderColorRect = {xStrokePreview, yStrokePreview, xStrokePreview + 25, yStrokePreview + 20};
+    static RECT drawingArea = {17, 180, 780, 550};
+    static RECT fillColorRect = {widthFirstColorBox, heightFirstColorBox, widthFirstColorBox + 25, heightFirstColorBox + 30};
+    static RECT borderColorRect = {widthSecondColorBox, heightSecondColorBox, widthSecondColorBox + 25, heightSecondColorBox + 20};
     static RECT tempRectangle;
 
     HBRUSH hBrush;
@@ -240,8 +240,8 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                     "Button",
                     "Settings",
                     WS_VISIBLE | WS_CHILD | BS_GROUPBOX,
-                    15, 180,
-                    140, 180,
+                    180, 10,
+                    140, 150,
                     hwnd,
                     (HMENU)ALL_TOOLS,
                     hInst,
@@ -252,7 +252,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                     "Button",
                     "Fill with color",
                     WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX,
-                    10, 15,
+                    10, 20,
                     120, 20,
                     allConfiguration,
                     (HMENU)FILL_COLOR_CHECKER,
@@ -264,7 +264,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                     "Static",
                     "Fill with color",
                     WS_VISIBLE | WS_CHILD | SS_LEFT,
-                    10, 40,
+                    10, 45,
                     90, 20,
                     allConfiguration,
                     (HMENU)0,
@@ -276,7 +276,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                     "Static",
                     "Border Size",
                     WS_VISIBLE | WS_CHILD | SS_LEFT,
-                    10, 65,
+                    10, 70,
                     100, 20,
                     allConfiguration,
                     (HMENU)0,
@@ -286,9 +286,9 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
             brushSize = CreateWindowEx(
                     0,
                     "Edit",
-                    "1",
+                    "10",
                     WS_VISIBLE | WS_CHILD | WS_BORDER | SS_CENTER,
-                    100, 65,
+                    100, 70,
                     25, 20,
                     allConfiguration,
                     (HMENU)0,
@@ -300,7 +300,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                     "Static",
                     "Border color",
                     WS_VISIBLE | WS_CHILD | SS_LEFT,
-                    10, 90,
+                    10, 95,
                     90, 20,
                     allConfiguration,
                     (HMENU)0,
@@ -312,7 +312,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                     "Static",
                     "Eraser Size",
                     WS_VISIBLE | WS_CHILD | SS_LEFT,
-                    10, 115,
+                    10, 120,
                     100, 20,
                     allConfiguration,
                     (HMENU)0,
@@ -322,9 +322,9 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
             eraserSize = CreateWindowEx(
                     0,
                     "Edit",
-                    "1",
+                    "30",
                     WS_VISIBLE | WS_CHILD | WS_BORDER | SS_CENTER,
-                    100, 115,
+                    100, 120,
                     25, 20,
                     allConfiguration,
                     (HMENU)0,
@@ -333,8 +333,8 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 
         case WM_PAINT:
             hdc = BeginPaint(hwnd, &ps);
-            updateColorControls(hdc, fillColor, xFillPreview, yFillPreview);
-            updateColorControls(hdc, borderColor, xStrokePreview, yStrokePreview);
+            updateColorControls(hdc, fillColor, widthFirstColorBox, heightFirstColorBox);
+            updateColorControls(hdc, borderColor, widthSecondColorBox, heightSecondColorBox);
 
             hdcMem = CreateCompatibleDC(hdc);
             SelectObject(hdcMem, hbmpDesignerImage);
@@ -368,12 +368,12 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
                 if(mouseY >= fillColorRect.top && mouseY <= fillColorRect.bottom)
                 {
                     fillColor = colorSelect(hwnd, fillColor);
-                    updateColorControls(hdc, fillColor, xFillPreview, yFillPreview);
+                    updateColorControls(hdc, fillColor, widthFirstColorBox, heightFirstColorBox);
                 }
                 else if(mouseY >= borderColorRect.top && mouseY <= borderColorRect.bottom)
                 {
                     borderColor = colorSelect(hwnd, borderColor);
-                    updateColorControls(hdc, borderColor, xFillPreview, yFillPreview);
+                    updateColorControls(hdc, borderColor, widthFirstColorBox, heightFirstColorBox);
                 }
                 return 0;
             }
