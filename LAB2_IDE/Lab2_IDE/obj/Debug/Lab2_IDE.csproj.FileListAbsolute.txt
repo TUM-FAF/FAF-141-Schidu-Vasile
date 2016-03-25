@@ -1,0 +1,9 @@
+c:\users\sckee\documents\visual studio 2015\Projects\Lab2_IDE\Lab2_IDE\bin\Debug\Lab2_IDE.exe.config
+c:\users\sckee\documents\visual studio 2015\Projects\Lab2_IDE\Lab2_IDE\bin\Debug\Lab2_IDE.exe
+c:\users\sckee\documents\visual studio 2015\Projects\Lab2_IDE\Lab2_IDE\bin\Debug\Lab2_IDE.pdb
+c:\users\sckee\documents\visual studio 2015\Projects\Lab2_IDE\Lab2_IDE\obj\Debug\Lab2_IDE.csprojResolveAssemblyReference.cache
+c:\users\sckee\documents\visual studio 2015\Projects\Lab2_IDE\Lab2_IDE\obj\Debug\Lab2_IDE.Properties.Resources.resources
+c:\users\sckee\documents\visual studio 2015\Projects\Lab2_IDE\Lab2_IDE\obj\Debug\Lab2_IDE.csproj.GenerateResource.Cache
+c:\users\sckee\documents\visual studio 2015\Projects\Lab2_IDE\Lab2_IDE\obj\Debug\Lab2_IDE.exe
+c:\users\sckee\documents\visual studio 2015\Projects\Lab2_IDE\Lab2_IDE\obj\Debug\Lab2_IDE.pdb
+c:\users\sckee\documents\visual studio 2015\Projects\Lab2_IDE\Lab2_IDE\obj\Debug\Lab2_IDE.Calculator.resources
